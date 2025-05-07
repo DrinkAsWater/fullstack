@@ -1,5 +1,5 @@
 #Fullstack 電子商務多賣家平台
- Spring Boot + React + Redux Toolkit + Stripe + MySQL
+ 🛒 Spring Boot + React + Redux Toolkit + Stripe + MSSQL
 
 ## 📁 專案結構
 - `/frontend` - React 前端專案，使用 Tailwind CSS + MUI
