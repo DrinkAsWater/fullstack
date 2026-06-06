@@ -18,6 +18,42 @@ export const fetchSellerProfile = createAsyncThunk(
   }
 );
 
+export const fetchAllSellers = createAsyncThunk(
+  "sellers/fetchAllSellers",
+  async (accountStatus: string, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/sellers?status=${accountStatus}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch sellers"
+      );
+    }
+  }
+);
+
+export const fetchSellerReport = createAsyncThunk(
+  "sellers/fetchSellerReport",
+  async (jwt: string, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/sellers/report", {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch report"
+      );
+    }
+  }
+);
+
 interface SellerState {
   sellers: any[];
   selectedSeller: any;
@@ -50,6 +86,28 @@ const sellerSlice = createSlice({
         state.profile = action.payload;
       })
       .addCase(fetchSellerProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAllSellers.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllSellers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sellers = action.payload;
+      })
+      .addCase(fetchAllSellers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchSellerReport.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSellerReport.fulfilled, (state, action) => {
+        state.loading = false;
+        state.report = action.payload;
+      })
+      .addCase(fetchSellerReport.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

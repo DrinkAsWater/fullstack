@@ -1,21 +1,26 @@
 import { Button, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import React from 'react'
-import { sendLoginSignupOTP } from 'src/State/AuthSlice'
-import { useAppDispatch } from 'src/State/Store'
+import { sendLoginSignupOTP, signup } from 'src/State/AuthSlice'
+import { useAppDispatch, useAppSelector } from 'src/State/Store'
 
 const RegisterForm = () => {
     const dispatch = useAppDispatch()
+    const { auth } = useAppSelector(store => store)
     const formik = useFormik({
         initialValues: {
             email: "",
             otp: "",
-            fullName: ""
+            fullName: "",
+            mobile: ""
         },
         onSubmit: (values) => {
-            console.log("form data", values)
-            // values.otp=Number(values.otp)
-
+            dispatch(signup({
+                email: values.email,
+                otp: values.otp,
+                fullName: values.fullName,
+                mobile: values.mobile
+            }))
         }
     })
 
@@ -39,20 +44,20 @@ const RegisterForm = () => {
                     helperText={formik.touched.email && formik.errors.email}
                 />
 
-                {true &&
+                {auth.otpSent &&
                     <div className='space-y-3'>
                         <div className="space-y-2">
-                        <p className="font-medium text-sm opacity-60">輸入發送至郵箱的驗證碼</p>
-                        <TextField
-                            fullWidth
-                            name="otp"
-                            label="Otp"
-                            value={formik.values.otp}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            error={formik.touched.otp && Boolean(formik.errors.otp)}
-                            helperText={formik.touched.otp && formik.errors.otp}
-                        />
+                            <p className="font-medium text-sm opacity-60">輸入發送至郵箱的驗證碼</p>
+                            <TextField
+                                fullWidth
+                                name="otp"
+                                label="Otp"
+                                value={formik.values.otp}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.otp && Boolean(formik.errors.otp)}
+                                helperText={formik.touched.otp && formik.errors.otp}
+                            />
                         </div>
                         <TextField
                             fullWidth
@@ -64,14 +69,22 @@ const RegisterForm = () => {
                             error={formik.touched.fullName && Boolean(formik.errors.fullName)}
                             helperText={formik.touched.fullName && formik.errors.fullName}
                         />
+                        <TextField
+                            fullWidth
+                            name="mobile"
+                            label="手機號碼"
+                            value={formik.values.mobile}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
                     </div>}
 
-                {false && <Button onClick={handleSendOtp} fullWidth variant='contained' sx={{ py: "11px" }}>
+                {!auth.otpSent && <Button onClick={handleSendOtp} fullWidth variant='contained' sx={{ py: "11px" }}>
                     發送otp
                 </Button>}
-                <Button onClick={() => formik.handleSubmit()} fullWidth variant='contained' sx={{ py: "11px" }}>
+                {auth.otpSent && <Button onClick={() => formik.handleSubmit()} fullWidth variant='contained' sx={{ py: "11px" }}>
                     註冊
-                </Button>
+                </Button>}
 
             </div>
         </div>

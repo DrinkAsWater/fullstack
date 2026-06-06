@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.AccountStatus;
 import com.example.demo.model.Seller;
+import com.example.demo.model.SellerReport;
 import com.example.demo.model.VerificationCode;
 import com.example.demo.repository.VerificationCodeRepository;
 import com.example.demo.request.LoginRequest;
 import com.example.demo.response.AuthResponse;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.EmailService;
+import com.example.demo.service.SellerReportService;
 import com.example.demo.service.SellerService;
 import com.example.demo.utils.OtpUtil;
 
@@ -33,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/sellers")
 public class SellerController {
 	private final SellerService sellerService;
+	private final SellerReportService sellerReportService;
 	private final VerificationCodeRepository verificationCodeRepository;
 	private final AuthService authService;
 	private final EmailService emailService;
@@ -98,12 +101,12 @@ public class SellerController {
 		return new ResponseEntity<>(seller, HttpStatus.OK);
 	}
 
-//	@GetMapping("/report")
-//	public  ResponseEntity<Seller>getSellerReport(@RequestHeader("Authorization")String jwt)throws Exception {
-//		
-//		Seller seller = sellerService.getSellerProfile(jwt);
-//		return new ResponseEntity<>(seller,HttpStatus.OK);
-//	}
+	@GetMapping("/report")
+	public ResponseEntity<SellerReport> getSellerReport(@RequestHeader("Authorization") String jwt) throws Exception {
+		Seller seller = sellerService.getSellerProfile(jwt);
+		SellerReport report = sellerReportService.getSellerReport(seller);
+		return ResponseEntity.ok(report);
+	}
 
 	@GetMapping()
 	public ResponseEntity<List<Seller>> getAllSellers(@RequestParam(required = false) AccountStatus status) {

@@ -1,15 +1,42 @@
-import { Button, FormControl, InputLabel, MenuItem, Paper, Select, styled, Table, TableBody, TableCell, tableCellClasses, TableContainer, TableHead, TableRow } from '@mui/material'
-import React, { useState } from 'react'
+import {
+  Button,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  styled,
+  Table,
+  TableBody,
+  TableCell,
+  tableCellClasses,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { fetchAllSellers } from 'src/State/seller/sellerSlice'
+import { useAppDispatch, useAppSelector } from 'src/State/Store'
+import { api } from 'src/config/Api'
 
+const accountStatusOptions = [
+  { status: 'PENDING_VERIFICATION', title: '待驗證' },
+  { status: 'ACTIVE', title: '啟用' },
+  { status: 'SUSPENDED', title: '暫停' },
+  { status: 'DEACTIVATED', title: '停用' },
+  { status: 'BANNED', title: '封鎖' },
+  { status: 'CLOSED', title: '關閉' },
+]
 
-const accountStatu = [
-  { status: 'PENDING_VERIFICATION', title: '待驗證', description: "帳戶正在等待驗證中" },
-  { status: 'ACTIVE', title: '啟用', description: '帳戶已啟用，狀態良好' },
-  { status: 'SUSPENDED', title: '暫停', description: '帳戶暫時被停用' },
-  { status: 'DEACTIVATED', title: '停用', description: '帳戶已被停用' },
-  { status: 'BANNED', title: '封鎖', description: '帳戶已被永久封鎖，原因可能包括違規' },
-  { status: 'CLOSED', title: '關閉', description: '帳戶已永久關閉，無法恢復' }
-];
+const statusColor: Record<string, 'default' | 'success' | 'warning' | 'error'> = {
+  ACTIVE: 'success',
+  PENDING_VERIFICATION: 'warning',
+  SUSPENDED: 'warning',
+  DEACTIVATED: 'error',
+  BANNED: 'error',
+  CLOSED: 'default',
+}
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -19,90 +46,112 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
   },
-}));
+}))
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
-}));
-
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
+}))
 
 const SellersTable = () => {
-  const [accountStatus, setAccountStatus] = useState("ACTIVE")
-  const handleChange = (event: any) => {
-    setAccountStatus(event.target.value)
+  const [accountStatus, setAccountStatus] = useState('ACTIVE')
+  const [updatingId, setUpdatingId] = useState<number | null>(null)
+  const dispatch = useAppDispatch()
+  const { seller } = useAppSelector(store => store)
+
+  useEffect(() => {
+    dispatch(fetchAllSellers(accountStatus))
+  }, [accountStatus])
+
+  const handleStatusChange = async (sellerId: number, newStatus: string) => {
+    setUpdatingId(sellerId)
+    try {
+      await api.patch(`/api/seller/${sellerId}/status/${newStatus}`, {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('jwt')}` },
+      })
+      dispatch(fetchAllSellers(accountStatus))
+    } catch (e) {
+      console.error('Failed to update seller status', e)
+    } finally {
+      setUpdatingId(null)
+    }
   }
+
   return (
     <>
       <div className='pb-5 w-60'>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">帳戶狀態</InputLabel>
+          <InputLabel>帳戶狀態</InputLabel>
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
             value={accountStatus}
             label="帳戶狀態"
-            onChange={handleChange}
+            onChange={(e) => setAccountStatus(e.target.value)}
           >
-            {accountStatu.map((item) => <MenuItem value={item.status}>{item.title}</MenuItem>)}
+            {accountStatusOptions.map((item) => (
+              <MenuItem key={item.status} value={item.status}>{item.title}</MenuItem>
+            ))}
           </Select>
         </FormControl>
       </div>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <Table sx={{ minWidth: 700 }} aria-label="sellers table">
           <TableHead>
             <TableRow>
               <StyledTableCell>賣家名稱</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell align="right">手機號碼</StyledTableCell>
-              <StyledTableCell align="right">統一編號 (GUI)</StyledTableCell>
+              <StyledTableCell align="right">統一編號 (GSTIN)</StyledTableCell>
               <StyledTableCell align="right">商店名稱</StyledTableCell>
               <StyledTableCell align="right">帳戶狀態</StyledTableCell>
               <StyledTableCell align="right">更改狀態</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <StyledTableRow key={row.name}>
-                <StyledTableCell component="th" scope="row">
-                  {row.name}
+            {seller.sellers.length === 0 && (
+              <StyledTableRow>
+                <StyledTableCell colSpan={7} align="center">
+                  {seller.loading ? '載入中...' : '無賣家資料'}
                 </StyledTableCell>
-                <StyledTableCell >{row.calories}</StyledTableCell>
-                <StyledTableCell align="right">{row.fat}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right">{row.protein}</StyledTableCell>
-                <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-                <StyledTableCell align="right"><Button>Change</Button></StyledTableCell>
+              </StyledTableRow>
+            )}
+            {seller.sellers.map((row: any) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell component="th" scope="row">{row.sellerName}</StyledTableCell>
+                <StyledTableCell>{row.email}</StyledTableCell>
+                <StyledTableCell align="right">{row.mobile}</StyledTableCell>
+                <StyledTableCell align="right">{row.GSTIN || '-'}</StyledTableCell>
+                <StyledTableCell align="right">{row.businessDetails?.businessName || '-'}</StyledTableCell>
+                <StyledTableCell align="right">
+                  <Chip
+                    label={row.accountStatus}
+                    color={statusColor[row.accountStatus] || 'default'}
+                    size="small"
+                  />
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  <Select
+                    size="small"
+                    value=""
+                    displayEmpty
+                    disabled={updatingId === row.id}
+                    onChange={(e) => handleStatusChange(row.id, e.target.value)}
+                    renderValue={() => '變更'}
+                  >
+                    {accountStatusOptions.map((opt) => (
+                      <MenuItem key={opt.status} value={opt.status}>{opt.title}</MenuItem>
+                    ))}
+                  </Select>
+                </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
     </>
-
   )
 }
 
