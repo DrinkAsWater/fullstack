@@ -6,7 +6,7 @@ import OrderItemDetails from './OrderDetails'
 import UserDetails from './UserDetails'
 import Address from './Address'
 import OrderDetails from './OrderDetails'
-import { useAppDispatch } from 'src/State/Store'
+import { useAppDispatch, useAppSelector } from 'src/State/Store'
 import { logout } from 'src/State/AuthSlice'
 
 const menu = [
@@ -31,10 +31,12 @@ const Account = () => {
     navigate(item.path);
   }
 
+  const { auth } = useAppSelector(store => store)
+
   return (
     <div className='px-5 lg:px-52 min-h-screen mt-10'>
       <div>
-        <h1 className='text-xl font-bold pb-5'>哈哭哪瑪塔塔</h1>
+        <h1 className='text-xl font-bold pb-5'>{auth.user?.fullName || "我的帳號"}</h1>
       </div>
       <Divider />
       <div className='grid grid-cols-1 lg:grid-cols-3 lg:min-h-[78vh]'>

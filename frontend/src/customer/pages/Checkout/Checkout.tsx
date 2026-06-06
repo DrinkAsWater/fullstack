@@ -1,6 +1,5 @@
 import { Box, Button, FormControlLabel, Modal, Radio, RadioGroup } from '@mui/material'
 import React, { useState } from 'react'
-import AddressCard from './AddressCard'
 import AddressForm from './AddressForm';
 import PricingCard from '../Cart/PricingCard';
 const style = {
@@ -47,20 +46,11 @@ const Checkout = () => {
                 <div className='space-y-5 lg:space-y-0 lg:grid grid-cols-3 lg:gap-9'>
                     <div className="col-span-2 space-y-5">
                         <div className="flex justify-between items-center">
-                            <h1 className="font-semibold">選擇收件地址</h1>
-                            <Button onClick={handleOpen}>
-                                新增地址
-                            </Button>
-                        </div>
-                        <div className="text-xs font-medium space-y-5">
-                            <p>已存地址</p>
-                            <div className='space-y-3'>
-                                {[1, 1, 1].map((item) => <AddressCard />)}
-                            </div>
+                            <h1 className="font-semibold">填寫收件地址</h1>
                         </div>
                         <div className='py-4 px-5 rounded-md border'>
-                            <Button onClick={handleOpen} >
-                                新增地址
+                            <Button onClick={handleOpen} variant='outlined' fullWidth>
+                                填寫收件地址並下單
                             </Button>
                         </div>
                     </div>
@@ -90,10 +80,11 @@ const Checkout = () => {
                             </div>
                         </div>
                         <div className='border rounded-md'>
-
                             <PricingCard />
                             <div className='p-5'>
-                                <Button fullWidth
+                                <Button
+                                    onClick={handleOpen}
+                                    fullWidth
                                     variant='contained'
                                     sx={{ py: "11px" }}>
                                     結帳

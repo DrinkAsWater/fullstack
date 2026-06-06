@@ -98,6 +98,7 @@ const productSlice = createSlice({
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
       state.loading = false;
       state.products = action.payload.content;
+      state.totalPage = action.payload.totalPages || 1;
     });
     builder.addCase(fetchAllProducts.rejected, (state, action) => {
       state.loading = false;

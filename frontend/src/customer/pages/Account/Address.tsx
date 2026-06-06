@@ -1,10 +1,10 @@
 import React from 'react'
-import UserAddress from './UserAddress'
 
 const Address = () => {
     return (
-        <div className='space-y-3'>
-            {[1, 1, 1, 1, 1].map((item) => <UserAddress />)}
+        <div className='py-5 text-sm text-gray-500 text-center'>
+            <p>尚無已儲存的收件地址</p>
+            <p className='mt-2'>結帳時可新增地址</p>
         </div>
     )
 }

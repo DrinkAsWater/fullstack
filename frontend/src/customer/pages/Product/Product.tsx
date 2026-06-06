@@ -8,10 +8,29 @@ import { fetchAllProducts } from 'src/State/customer/ProductSlice'
 import { useAppDispatch, useAppSelector } from 'src/State/Store'
 import { useParams, useSearchParams } from 'react-router-dom'
 
+const categoryLabel: Record<string, string> = {
+    men: "男裝",
+    women: "女裝",
+    men_tshirts: "男士T恤",
+    men_polos: "男士Polo衫",
+    men_shirts: "男士襯衫",
+    men_casual_pants: "男士休閒褲",
+    men_jeans: "男士牛仔褲",
+    men_suit_pants: "男士西裝褲",
+    women_shirts: "女士襯衫",
+    women_tshirts: "女士T恤",
+    women_tank_tops: "女士背心",
+    women_casual_dresses: "女士連身裙",
+    women_evening_dresses: "女士晚禮服",
+    women_skirts: "女士半身裙",
+    home_funiture: "家居與家俱",
+    electronics: "電子產品",
+}
+
 const Product = () => {
     const theme = useTheme()
     const isLarge = useMediaQuery(theme.breakpoints.up("lg"))
-    const [sort, setSort] = useState()
+    const [sort, setSort] = useState<string>("")
     const [page, setPage] = useState(1);
     const dispatch = useAppDispatch();
     const [searchParam, setSearchParams] = useSearchParams();
@@ -19,6 +38,7 @@ const Product = () => {
     const { product } = useAppSelector((store => store))
     const handleSortChange = (event: any) => {
         setSort(event.target.value)
+        setPage(1)
     }
     const handlePageChange = (value: number) => {
         setPage(value)
@@ -26,22 +46,25 @@ const Product = () => {
     useEffect(() => {
         const [minPrice, maxPrice] = searchParam.get("price")?.split("-") || [];
         const color = searchParam.get("color");
-        const minDiscount = searchParam.get("discount") ? Number(searchParam.get("discount"))
-            : undefined;
+        const minDiscount = searchParam.get("discount") ? Number(searchParam.get("discount")) : undefined;
         const pageNumber = page - 1;
-        const newFilter = {
+        dispatch(fetchAllProducts({
+            category: category || "",
             color: color || "",
             minPrice: minPrice ? Number(minPrice) : undefined,
             maxPrice: maxPrice ? Number(maxPrice) : undefined,
             minDiscount,
-            pageNumber
-        }
-        dispatch(fetchAllProducts(newFilter))
-    }, [category, searchParam])
+            sort: sort || "",
+            pageNumber,
+        }))
+    }, [category, searchParam, sort, page])
+
+    const title = category ? (categoryLabel[category] || category.replace(/_/g, " ")) : "所有商品"
+
     return (
         <div className='z-10 mt-10'>
             <div>
-                <h1 className='text-3xl text-center font-bold text-gray-700 pb-5 px-9 uppercase space-x-2'>時尚女款T恤</h1>
+                <h1 className='text-3xl text-center font-bold text-gray-700 pb-5 px-9 uppercase'>{title}</h1>
             </div>
 
             <div className='lg:flex'>
@@ -77,12 +100,13 @@ const Product = () => {
                     </div>
                     <Divider />
                     <section className='products_section grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-5 px-5 justify-center'>
-                        {product.products.map((item) => <ProductCard item={item} />)}
+                        {product.products.map((item) => <ProductCard key={item.id} item={item} />)}
                     </section>
                     <div className='flex justify-center py-10'>
                         <Pagination
+                            page={page}
                             onChange={(e, value) => handlePageChange(value)}
-                            count={10}
+                            count={product.totalPage}
                             variant="outlined"
                             color='primary' />
                     </div>

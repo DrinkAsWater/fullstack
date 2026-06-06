@@ -92,7 +92,11 @@ interface AuthState {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOtp: (state) => {
+      state.otpSent = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(sendLoginSignupOTP.pending, (state) => {
       state.loading = true;
@@ -124,4 +128,5 @@ const authSlice = createSlice({
   },
 });
 
+export const { resetOtp } = authSlice.actions;
 export default authSlice.reducer;

@@ -35,15 +35,15 @@ const ProductCard = ({ item }: { item: Product }) => {
   }
 
   return (
-    <div onClick={() => navigate(`/product-details/${item.category?.categoryId}/
-    ${item.title}/${item.id}`)} className='group px-4 relative'>
+    <div onClick={() => navigate(`/product-details/${item.category?.categoryId}/${item.title}/${item.id}`)} className='group px-4 relative'>
       <div className='card'
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {item.images.map((item, index) => <img
+        {item.images.map((img, index) => <img
+          key={index}
           className='card-media object-top'
-          src={item} alt=""
+          src={img} alt=""
           style={{ transform: `translateX(${(index - currentImage) * 100}%)` }}
         />)}
 

@@ -32,9 +32,9 @@ const CartItemCard = ({item}:{item:CartItem}) => {
                 <div className='space-y-2'>
                     <h1 className="font-semibold text-lg">{item.product.seller?.businessDetails.businessName}</h1>
                     <p className='text-gray-600 font-medium text-sm'>{item.product.title}</p>
-                    <p className='text-gray-400 text-xs'><strong>Sold by:</strong> {item.product.seller?.sellerName || "Wu Shop"}</p>
-                    <p className='text-sm'>7 days replacement available</p>
-                    <p className='text-sm text-gray-500'><strong>quantity : </strong> {item.quantity}</p>
+                    <p className='text-gray-400 text-xs'><strong>賣家：</strong>{item.product.seller?.sellerName || "Wu Shop"}</p>
+                    <p className='text-sm'>7天換貨保障</p>
+                    <p className='text-sm text-gray-500'><strong>數量：</strong>{item.quantity}</p>
                 </div>
             </div>
             <Divider />
@@ -51,7 +51,7 @@ const CartItemCard = ({item}:{item:CartItem}) => {
                     </div>
                 </div>
                 <div className='pr-5'>
-                    <p className='text-gray-700 font-medium'>${item.sellingPrice}</p>
+                    <p className='text-gray-700 font-medium'>NT${item.sellingPrice}</p>
                 </div>
             </div>
             <div className='absolute top-1 right-1'>

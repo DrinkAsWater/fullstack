@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import StarIcon from '@mui/icons-material/Star';
 import { teal } from '@mui/material/colors';
-import { Button, Divider } from '@mui/material';
-import { AddShoppingCart, Diversity1, FavoriteBorder, LocalShipping, Remove, Shield, Wallet, WorkspacePremium } from '@mui/icons-material';
+import { Button, Divider, MenuItem, Select } from '@mui/material';
+import { AddShoppingCart, FavoriteBorder, LocalShipping, Remove, Shield, Wallet, WorkspacePremium } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import SimilarProduct from './SimilarProduct1';
 import ReviewCard from '../Review/ReviewCard';
 import { useAppDispatch, useAppSelector } from 'src/State/Store';
 import { useParams } from 'react-router-dom';
 import { fetchProductById } from 'src/State/customer/ProductSlice';
+import { addItemToCart } from 'src/State/customer/cartSlice';
+import { addProductToWishlist } from 'src/State/customer/wishlistSlice';
 
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = React.useState(1);
+  const [selectedSize, setSelectedSize] = useState("");
   const dispatch = useAppDispatch()
   const { productId } = useParams()
   const { product } = useAppSelector(store => store)
@@ -21,8 +24,28 @@ const ProductDetails = () => {
   useEffect(() => {
     dispatch(fetchProductById(Number(productId)))
   }, [productId])
+
+  useEffect(() => {
+    if (product.product?.sizes) {
+      setSelectedSize(product.product.sizes.split(",")[0].trim())
+    }
+  }, [product.product])
+
   const handleActiveImage = (value: number) => () => {
     setActiveImage(value)
+  }
+
+  const handleAddToCart = () => {
+    dispatch(addItemToCart({
+      jwt: localStorage.getItem("jwt"),
+      request: { productId: product.product?.id, size: selectedSize, quantity },
+    }))
+  }
+
+  const handleAddToWishlist = () => {
+    if (product.product?.id) {
+      dispatch(addProductToWishlist({ productId: product.product.id }))
+    }
   }
   return (
     <div className='px-5 lg:px-20 pt-10'>
@@ -94,34 +117,48 @@ const ProductDetails = () => {
 
           </div>
 
+          {product.product?.sizes && (
+            <div className='mt-7 space-y-2'>
+              <h1>選擇尺寸</h1>
+              <div className='flex flex-wrap gap-2'>
+                {product.product.sizes.split(",").map((size) => (
+                  <button
+                    key={size.trim()}
+                    onClick={() => setSelectedSize(size.trim())}
+                    className={`px-4 py-1 border rounded-md text-sm font-medium transition-colors
+                      ${selectedSize === size.trim() ? "bg-primary-color text-white border-primary-color" : "hover:border-primary-color"}`}
+                  >
+                    {size.trim()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className='mt-7 space-y-2'>
             <h1>購買數量</h1>
             <div className='flex items-center gap-2 w-[140px] justify-between'>
               <Button disabled={quantity === 1} onClick={() => setQuantity(quantity - 1)}>
                 <Remove />
               </Button>
-              <span>
-                {quantity}
-              </span>
+              <span>{quantity}</span>
               <Button onClick={() => setQuantity(quantity + 1)}>
                 <AddIcon />
               </Button>
-
             </div>
-
           </div>
-
 
           <div className='mt-12 flex items-center gap-5'>
             <Button
+              onClick={handleAddToCart}
               fullWidth
               variant='outlined'
               startIcon={<AddShoppingCart />}
               sx={{ py: "1rem" }}>
               加入購物車
             </Button>
-
             <Button
+              onClick={handleAddToWishlist}
               fullWidth
               variant='outlined'
               startIcon={<FavoriteBorder />}
@@ -129,78 +166,11 @@ const ProductDetails = () => {
               願望清單
             </Button>
           </div>
-          <div className='mt-5' >
-            <p>彈性羅紋針織設計是每年非常流行的單品。
-              領口是高領的，所以不需要圍巾！雖然價格不高，但質感很好，建議買兩三個顏色。
-              享受與外衣和下裝相配的多彩色彩變化♪
-              搭配：
-              
-              TW
-              
-              略過導覽功能
-              搜尋
-              
-              
-              
-              建立
-              
-              1
-              
-              顯示圖片
-              
-              TW
-              首頁
-              Shorts
-              訂閱內容
-              個人中心
-              觀看記錄
-              播放清單
-              你的影片
-              稍後觀看
-              喜歡的影片
-              訂閱內容
-              
-              Stanley 史丹利
-              
-              Code With Zosh
-              
-              室友Cyo
-              
-              滾石唱片 ROCK RECORDS
-              
-              Code Marshal
-              
-              Bouali Ali
-              
-              烙賽瑞奇 Outside Richie
-              顯示更多
-              探索
-              發燒影片
-              音樂
-              電影
-              直播
-              遊戲
-              新聞
-              體育
-              課程
-              Podcast
-              更多 YouTube 功能
-              YouTube Premium
-              YouTube 工作室
-              YouTube Music
-              YouTube Kids
-              設定
-              檢舉記錄
-              說明
-              提供意見
-              簡介媒體著作權與我們聯絡創作者廣告開發人員
-              條款隱私權政策與安全性YouTube 運作方式測試新功能
-              © 2025 Google LLC
-              
-              經典的冬季內衣單品，羅紋高領針織衫。
-              簡約設計，與任何下裝完美搭配◎
-            </p>
-          </div>
+          {product.product?.description && (
+            <div className='mt-5 text-sm text-gray-600 leading-relaxed'>
+              <p>{product.product.description}</p>
+            </div>
+          )}
           <div className='mt-12 space-y-5'>
             <ReviewCard />
             <Divider />

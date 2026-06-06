@@ -17,7 +17,7 @@ const Order = () => {
         <p>隨時開始</p>
       </div>
       <div className="space-y-2">
-        {order.orders.map((order) => order.orderItems.map((item)=><OrderItem order={order} item={item} />))}
+        {order.orders.map((ord) => ord.orderItems.map((item) => <OrderItem key={item.id} order={ord} item={item} />))}
       </div>
 
     </div>

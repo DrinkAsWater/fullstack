@@ -5,6 +5,15 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Order, OrderItem } from 'src/types/orderTypes'
 
+const orderStatusLabel: Record<string, string> = {
+  PENDING: "待處理",
+  CONFIRM: "已確認",
+  SHIPPED: "已出貨",
+  ARRIVING: "運送中",
+  DELIVERED: "已送達",
+  CANCELLED: "已取消",
+}
+
 const OrderItemCard = ({item,order}:{item:OrderItem,order:Order}) => {
   const navigate = useNavigate();
   return (
@@ -16,8 +25,8 @@ const OrderItemCard = ({item,order}:{item:OrderItem,order:Order}) => {
           </Avatar>
         </div>
         <div>
-          <h1 className='font-bold text-primary-color'>待處理</h1>
-          <p>預計送達日期：{order.deliverDate} </p>
+          <h1 className='font-bold text-primary-color'>{orderStatusLabel[order.orderStatus] ?? order.orderStatus}</h1>
+          <p>預計送達日期：{order.deliverDate}</p>
         </div>
 
       </div>
@@ -28,10 +37,7 @@ const OrderItemCard = ({item,order}:{item:OrderItem,order:Order}) => {
         <div className='w-full space-y-2'>
           <h1 className='font-bold'>{item.product.seller?.businessDetails.businessName}</h1>
           <p>{item.product.title}</p>
-          <p>
-            <strong>size :</strong>
-            Free
-          </p>
+          <p><strong>尺寸：</strong>{item.size || "均碼"}</p>
         </div>
 
       </div>
