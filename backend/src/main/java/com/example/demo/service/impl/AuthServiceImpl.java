@@ -59,8 +59,7 @@ public class AuthServiceImpl implements AuthService {
 				}
 
 			} else {
-				System.out.println("email" + email);
-				User user = userRespository.findByEmail(email);
+					User user = userRespository.findByEmail(email);
 				if (user == null) {
 					throw new Exception("系統中無此電子郵件的使用者，請重新確認");
 				}
@@ -102,7 +101,7 @@ public class AuthServiceImpl implements AuthService {
 			createdUser.setEmail(req.getEmail());
 			createdUser.setFullName( req.getFullName() );
 			createdUser.setRole(USER_ROLE.ROLE_CUSTOMER);
-			createdUser.setMobile("0909073522");
+			createdUser.setMobile(req.getMobile());
 			createdUser.setPassword(passwordEncoder.encode(req.getOtp()));
 
 		user = userRespository.save(createdUser);
@@ -157,7 +156,6 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		VerificationCode verificationCode = verificationCodeRepository.findByEmail(username);
-		System.out.println("----" + username + "-------");
 		if (verificationCode == null || !verificationCode.getOtp().equals(otp)) {
 			throw new Exception("wrong otp");
 		}

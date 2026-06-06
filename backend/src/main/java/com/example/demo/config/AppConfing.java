@@ -24,8 +24,10 @@ public class AppConfing {
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated()
-						.requestMatchers("/api/products/*/reviews").permitAll().anyRequest().permitAll())
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers("/api/products/*/reviews").permitAll()
+						.requestMatchers("/api/**").authenticated()
+						.anyRequest().permitAll())
 				.addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class).csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(CorsConfigurationSource()));
 

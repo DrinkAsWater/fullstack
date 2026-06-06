@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
 			category.setParentCategory(category1);
 			category2 = categoryRepository.save(category);
 		}
-		Category category3 = categoryRepository.findByCategoryId(req.getCategory2());
+		Category category3 = categoryRepository.findByCategoryId(req.getCategory3());
 		if (category3 == null) {
 			Category category = new Category();
 			category.setCategoryId(req.getCategory3());
@@ -129,13 +129,13 @@ public class ProductServiceImpl implements ProductService {
 				predicates.add(criteriaBuilder.equal(root.get("size"), sizes));
 			}
 			if (minPrice != null) {
-				predicates.add(criteriaBuilder.equal(root.get("sellingPrice"), minPrice));
+				predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("sellingPrice"), minPrice));
 			}
 			if (maxPrice != null) {
-				predicates.add(criteriaBuilder.equal(root.get("sellingPrice"), maxPrice));
+				predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("sellingPrice"), maxPrice));
 			}
 			if (minDiscount != null) {
-				predicates.add(criteriaBuilder.equal(root.get("discountPercent"), minDiscount));
+				predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("discountPercent"), minDiscount));
 			}
 			if (stock != null) {
 				predicates.add(criteriaBuilder.equal(root.get("stock"), stock));
