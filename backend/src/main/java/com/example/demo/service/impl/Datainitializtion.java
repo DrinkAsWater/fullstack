@@ -20,7 +20,6 @@ import com.example.demo.model.HomeCategory;
 import com.example.demo.model.Product;
 import com.example.demo.model.Seller;
 import com.example.demo.model.User;
-import com.example.demo.repository.AddressRepository;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.DealRepository;
 import com.example.demo.repository.HomeCategoryRepository;
@@ -39,7 +38,6 @@ public class Datainitializtion implements CommandLineRunner {
 	private final SellerRepository sellerRepository;
 	private final CategoryRepository categoryRepository;
 	private final ProductRepository productRepository;
-	private final AddressRepository addressRepository;
 	private final HomeCategoryRepository homeCategoryRepository;
 	private final DealRepository dealRepository;
 
@@ -71,13 +69,13 @@ public class Datainitializtion implements CommandLineRunner {
 		Seller existing = sellerRepository.findByEmail(sellerEmail);
 		if (existing != null) return existing;
 
+		// Address 不單獨 save — 讓 Seller.@OneToOne(cascade=ALL) 自動處理
 		Address address = new Address();
 		address.setAddress("台北市信義區信義路五段7號");
 		address.setCity("台北市");
 		address.setState("台灣");
 		address.setPinCode("110");
 		address.setMobile("0912345678");
-		address = addressRepository.save(address);
 
 		BusinessDetails business = new BusinessDetails();
 		business.setBusinessName("Wu 時尚精品");
