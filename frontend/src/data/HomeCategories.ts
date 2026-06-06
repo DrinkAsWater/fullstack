@@ -1,155 +1,193 @@
 export const homeCategories = [
+  // ── ELECTRIC_CATEGORIES (icon bar at top) ──────────────────────────────
   {
     categoryId: "smartphones",
     section: "ELECTRIC_CATEGORIES",
-    name: " Smartphone",
-    image: "https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "智慧手機",
+    image: "https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=200"
   },
   {
     categoryId: "laptops",
     section: "ELECTRIC_CATEGORIES",
-    name: "筆電",
-    image: "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "筆記型電腦",
+    image: "https://images.pexels.com/photos/18105/pexels-photo.jpg?auto=compress&cs=tinysrgb&w=200"
   },
   {
     categoryId: "smartwatches",
     section: "ELECTRIC_CATEGORIES",
-    name: "Advanced Smartwatch",
-    image: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg"
+    name: "智慧手錶",
+    image: "https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=200"
   },
   {
     categoryId: "tablets",
     section: "ELECTRIC_CATEGORIES",
-    name: "High-Performance Tablet",
-    image: "https://images.pexels.com/photos/30562825/pexels-photo-30562825/free-photo-of-pelican-vault-v525-crdbag.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "平板電腦",
+    image: "https://images.pexels.com/photos/1334597/pexels-photo-1334597.jpeg?auto=compress&cs=tinysrgb&w=200"
   },
+  {
+    categoryId: "headphones",
+    section: "ELECTRIC_CATEGORIES",
+    name: "耳機音響",
+    image: "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=200"
+  },
+  {
+    categoryId: "cameras",
+    section: "ELECTRIC_CATEGORIES",
+    name: "相機攝影",
+    image: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=200"
+  },
+  {
+    categoryId: "gaming",
+    section: "ELECTRIC_CATEGORIES",
+    name: "遊戲周邊",
+    image: "https://images.pexels.com/photos/3945659/pexels-photo-3945659.jpeg?auto=compress&cs=tinysrgb&w=200"
+  },
+
+  // ── GRID (mosaic photo wall) ────────────────────────────────────────────
   {
     categoryId: "clothing-women",
     section: "GRID",
-    name: "Traditional Red Bridal Wear",
-    image: "https://images.pexels.com/photos/13966969/pexels-photo-13966969.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "女士禮服",
+    image: "https://images.pexels.com/photos/13966969/pexels-photo-13966969.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
     categoryId: "smartwatches",
     section: "GRID",
-    name: "Smartwatch Modern Display",
-    image: "https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image-4.jpg"
+    name: "手錶配件",
+    image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
     categoryId: "clothing-women",
     section: "GRID",
-    name: "Elegant White Bridal Wear",
-    image: "https://images.pexels.com/photos/12730873/pexels-photo-12730873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-  },
-  {
-    categoryId: "home-decoration",
-    section: "GRID",
-    name: "Festive Bell with Bokeh",
-    image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-  },
-  {
-    categoryId: "home-decoration",
-    section: "GRID",
-    name: "Handcrafted Christmas Decor",
-    image: "https://images.pexels.com/photos/754711/pexels-photo-754711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "女士連衣裙",
+    image: "https://images.pexels.com/photos/12730873/pexels-photo-12730873.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
     categoryId: "clothing-men",
     section: "GRID",
-    name: "Stylish Formal Menswear",
-    image: "https://images.pexels.com/photos/29705594/pexels-photo-29705594/free-photo-of-festive-snowman-decorations-at-christmas-market.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "男士休閒服",
+    image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
+  {
+    categoryId: "clothing-men",
+    section: "GRID",
+    name: "男士商務裝",
+    image: "https://images.pexels.com/photos/3768166/pexels-photo-3768166.jpeg?auto=compress&cs=tinysrgb&w=600"
+  },
+  {
+    categoryId: "clothing-men",
+    section: "GRID",
+    name: "男士丹寧",
+    image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=600"
+  },
+
+  // ── SHOP_BY_CATEGORIES (circular category cards) ───────────────────────
   {
     parentCategoryId: "home-living",
     categoryId: "furniture",
     section: "SHOP_BY_CATEGORIES",
-    name: "Furniture",
-    image: "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg"
+    name: "居家傢俱",
+    image: "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "beauty-health",
     categoryId: "skincare",
-    "section": "SHOP_BY_CATEGORIES",
-    name: "Skincare",
-    image: "https://media.istockphoto.com/id/1349994332/photo/self-care-package-seasonal-gift-box-with-zero-waste-organic-cosmetics-products-for-men.jpg"
+    section: "SHOP_BY_CATEGORIES",
+    name: "美妝保養",
+    image: "https://images.pexels.com/photos/3321416/pexels-photo-3321416.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "food-beverages",
     categoryId: "groceries",
     section: "SHOP_BY_CATEGORIES",
-    name: "Groceries",
-    image: "https://media.istockphoto.com/id/1222581489/photo/farmer-woman-holding-wooden-box-full-of-fresh-raw-vegetables.jpg"
+    name: "生鮮食品",
+    image: "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "fashion",
     categoryId: "clothing-women",
     section: "SHOP_BY_CATEGORIES",
-    name: "Women's Clothing",
-    image: "https://images.pexels.com/photos/3170438/pexels-photo-3170438.jpeg"
+    name: "女士服飾",
+    image: "https://images.pexels.com/photos/3170438/pexels-photo-3170438.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "kids",
     categoryId: "toys",
     section: "SHOP_BY_CATEGORIES",
-    name: "Toys",
-    image: "https://media.istockphoto.com/id/867830532/photo/wooden-toys-on-white-background-3d-rendering.jpg"
+    name: "兒童玩具",
+    image: "https://images.pexels.com/photos/1620779/pexels-photo-1620779.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "accessories",
     categoryId: "watches",
     section: "SHOP_BY_CATEGORIES",
-    name: "Watches",
-    image: "https://media.istockphoto.com/id/1180244659/photo/luxury-watch-isolated-on-white-background-with-clipping-path-for-artwork-or-design-black.jpg"
+    name: "手錶珠寶",
+    image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "sports-outdoors",
     categoryId: "sports",
     section: "SHOP_BY_CATEGORIES",
-    name: "Sports",
-    image: "https://images.pexels.com/photos/3822583/pexels-photo-3822583.jpeg"
+    name: "運動戶外",
+    image: "https://images.pexels.com/photos/3822583/pexels-photo-3822583.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "education",
     categoryId: "books",
     section: "SHOP_BY_CATEGORIES",
-    name: "Books",
-    image: "https://images.pexels.com/photos/30512748/pexels-photo-30512748.jpeg"
+    name: "圖書文具",
+    image: "https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg?auto=compress&cs=tinysrgb&w=400"
+  },
+  {
+    parentCategoryId: "fashion",
+    categoryId: "clothing-men",
+    section: "SHOP_BY_CATEGORIES",
+    name: "男士服飾",
+    image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     parentCategoryId: "automotive",
     categoryId: "automotive",
     section: "SHOP_BY_CATEGORIES",
-    name: "Automotive",
-    image: "https://media.istockphoto.com/id/1487173399/photo/light-blue-bucket-and-many-different-car-wash-products-on-white-background.jpg"
+    name: "汽車用品",
+    image: "https://images.pexels.com/photos/1164778/pexels-photo-1164778.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
+
+  // ── DEALS ──────────────────────────────────────────────────────────────
   {
     categoryId: "smartphones",
     section: "DEALS",
-    name: "Smartphone Flash Sale",
-    image: "https://images.pexels.com/photos/30530424/pexels-photo-30530424.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "手機限時優惠",
+    image: "https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     categoryId: "laptops",
     section: "DEALS",
-    name: "Discounted Gaming Laptop",
-    image: "https://img.pchome.com.tw/cs/items/DHAKAV1900HWHNP/000001_1738555080.jpg"
+    name: "筆電特賣折扣",
+    image: "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     categoryId: "clothing-women",
     section: "DEALS",
-    name: "Exclusive Women's Wear",
-    image: "https://images.pexels.com/photos/30557056/pexels-photo-30557056.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "女裝獨家優惠",
+    image: "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     categoryId: "furniture",
     section: "DEALS",
-    name: "Limited Offer - Home Furniture",
-    image: "https://images.pexels.com/photos/30539628/pexels-photo-30539628.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "傢俱限量特惠",
+    image: "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
     categoryId: "watches",
     section: "DEALS",
-    name: "Luxury Watches Discount",
-    image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    name: "精品錶款折扣",
+    image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=400"
+  },
+  {
+    categoryId: "sports",
+    section: "DEALS",
+    name: "運動品牌特賣",
+    image: "https://images.pexels.com/photos/3822583/pexels-photo-3822583.jpeg?auto=compress&cs=tinysrgb&w=400"
   }
 ];
