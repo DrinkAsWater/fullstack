@@ -18,6 +18,7 @@ import com.example.demo.model.Order;
 import com.example.demo.model.OrderItem;
 import com.example.demo.model.User;
 import com.example.demo.repository.AddressRepository;
+import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.OderItemRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.service.OrderService;
@@ -30,7 +31,8 @@ import lombok.RequiredArgsConstructor;
 public class OrderServiceImpl implements OrderService {
 	private final OrderRepository orderRepository;
 	private final AddressRepository addressRepository;
-	private final OderItemRepository  oderItemRepository ;
+	private final OderItemRepository oderItemRepository;
+	private final CartRepository cartRepository;
 
 	@Override
 	@Transactional
@@ -53,16 +55,16 @@ public class OrderServiceImpl implements OrderService {
 			Long sellerId = entry.getKey();
 			List<CartItem> items = entry.getValue();
 			
-			int totalOrderPrice = items.stream().mapToInt
-					(CartItem::getSellingPrice
-							).sum();
+			int totalMrpPrice = items.stream().mapToInt(CartItem::getMrpPrice).sum();
+			int totalSellingPrice = items.stream().mapToInt(CartItem::getSellingPrice).sum();
 			int totalItem = items.stream().mapToInt(CartItem::getQuantity).sum();
-			
+
 			Order createOrder = new Order();
 			createOrder.setUser(user);
 			createOrder.setSellerId(sellerId);
-			createOrder.setTotalMrpPrice(totalOrderPrice);
-			createOrder.setTotalSellingPrice(totalOrderPrice);
+			createOrder.setTotalMrpPrice(totalMrpPrice);
+			createOrder.setTotalSellingPrice(totalSellingPrice);
+			createOrder.setDiscount(totalMrpPrice - totalSellingPrice);
 			createOrder.setTotalItem(totalItem);
 			createOrder.setShippingAddress(address);
 			createOrder.setOrderStatus(OrderStatus.PENDING);
@@ -92,6 +94,14 @@ public class OrderServiceImpl implements OrderService {
 			}
 
 		}
+
+		cart.getCartItems().clear();
+		cart.setTotalItem(0);
+		cart.setTotalSellingPrice(0);
+		cart.setTotalMrpPrice(0);
+		cart.setDiscount(0);
+		cart.setCouponCode(null);
+		cartRepository.save(cart);
 
 		return orders;
 	}
@@ -127,11 +137,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order cancelOrder(Long orderId, User user) throws Exception {
 		Order order = findOrderById(orderId);
-		order.setOrderStatus(OrderStatus.CANCELLED);
-		
-		if (user.getId().equals(order.getUser().getId())) {
-			throw new Exception("you don't access to this order");
+		if (!user.getId().equals(order.getUser().getId())) {
+			throw new Exception("you don't have access to this order");
 		}
+
+		order.setOrderStatus(OrderStatus.CANCELLED);
 		
 		return orderRepository.save(order);
 	}

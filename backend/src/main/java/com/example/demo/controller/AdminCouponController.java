@@ -42,7 +42,7 @@ public class AdminCouponController {
 		User user = userService.findUserByJwtToken(jwt);
 		Cart cart;
 		
-		if (apply.equals(true)) {
+		if (apply.equals("true")) {
 			cart = couponService.applyCoupon(code, orderValue, user);
 		}
 		else {
