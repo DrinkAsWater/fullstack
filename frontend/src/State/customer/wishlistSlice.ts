@@ -23,7 +23,7 @@ export const getWishlistByUserId = createAsyncThunk(
     } catch (error: any) {
       console.log("error", error);
       return rejectWithValue(
-        error.response?.data.message || "Failed to fetch wishlist"
+        error.response?.data?.error || "Failed to fetch wishlist"
       );
     }
   }
@@ -46,7 +46,7 @@ export const addProductToWishlist = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data.message || "Failed to add product to wishlist"
+        error.response?.data?.error || "Failed to add product to wishlist"
       );
     }
   }

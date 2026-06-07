@@ -65,7 +65,7 @@ const ProductDetails = () => {
 
         <section>
           <h1 className='font-bold text-lg text-primary-color'>
-            {product.product?.seller?.businessDetails.businessName}
+            {product.product?.seller?.businessName}
           </h1>
           <p className='text-gray-500 font-semibold'>{product.product?.title}</p>
           <div className='flex justify-between items-center py-2 border w-[180px] px-3 pt-5'>

@@ -7,21 +7,26 @@ const SHIPPING_FEE = 69
 
 const PricingCard = () => {
     const { cart } = useAppSelector(store => store)
+    const totalItem = cart.cart?.totalItem ?? 0
     const mrp = cart.cart?.totalMrpPrice ?? 0
     const selling = cart.cart?.totalSellingPrice ?? 0
-    const discount = mrp - selling
+    const discount = cart.cart?.discount ?? 0
     const total = selling + SHIPPING_FEE
 
     return (
         <>
             <div className='space-y-3 p-5'>
                 <div className='flex justify-between items-center'>
+                    <span>商品數量</span>
+                    <span>{totalItem} 件</span>
+                </div>
+                <div className='flex justify-between items-center'>
                     <span>小計</span>
                     <span>${mrp}</span>
                 </div>
                 <div className='flex justify-between items-center'>
                     <span>折扣</span>
-                    <span className='text-green-600'>-${discount}</span>
+                    <span className='text-green-600'>-{discount}%</span>
                 </div>
                 <div className='flex justify-between items-center'>
                     <span>運費</span>

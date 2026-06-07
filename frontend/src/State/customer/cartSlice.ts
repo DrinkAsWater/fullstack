@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../../config/Api";
 import { Cart, CartItem } from "src/types/cartTypes";
-import {
-  sumCartItemMrpPrice,
-  sumCartItemSellingPrice,
-} from "src/Util/sumCartItemMrpPrice";
 import { applyCoupon } from "./couponSlice";
 
 interface CartState {
@@ -51,7 +47,7 @@ interface AddItemRequest {
 export const addItemToCart = createAsyncThunk<
   CartItem,
   { jwt: string | null; request: AddItemRequest }
->("cart/addItemToCart", async ({ jwt, request }, { rejectWithValue }) => {
+>("cart/addItemToCart", async ({ jwt, request }, { dispatch, rejectWithValue }) => {
   try {
     const response = await api.put(`${API_URL}/add`, request, {
       headers: {
@@ -59,6 +55,9 @@ export const addItemToCart = createAsyncThunk<
       },
     });
     console.log("CART ADDED", response.data);
+    if (jwt) {
+      dispatch(fetchUserCart(jwt));
+    }
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message);
@@ -68,14 +67,17 @@ export const addItemToCart = createAsyncThunk<
 export const deleteCartItem = createAsyncThunk<
   any,
   { jwt: string; cartItemId: number }
->("cart/deleteCartItem", async ({ jwt, cartItemId }, { rejectWithValue }) => {
+>("cart/deleteCartItem", async ({ jwt, cartItemId }, { dispatch, rejectWithValue }) => {
   try {
-    const response = await api.delete(`${API_URL}/delete/${cartItemId}`, {
+    const response = await api.delete(`${API_URL}/item/${cartItemId}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
     console.log("CART ITEM DELETED", response.data);
+    if (jwt) {
+      dispatch(fetchUserCart(jwt));
+    }
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error.message || "Failed to delete cartItem");
@@ -87,7 +89,7 @@ export const updateCartItem = createAsyncThunk<
   { jwt: string | null; cartItemId: number; cartItem: any }
 >(
   "cart/updateCartItem",
-  async ({ jwt, cartItemId, cartItem }, { rejectWithValue }) => {
+  async ({ jwt, cartItemId, cartItem }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.put(
         `${API_URL}/item/${cartItemId}`,
@@ -96,8 +98,10 @@ export const updateCartItem = createAsyncThunk<
           headers: { Authorization: `Bearer ${jwt}` },
         }
       );
-      console.log("cart item updated successfully", response.data)
       console.log("CART ITEM UPDATED", response.data);
+      if (jwt) {
+        dispatch(fetchUserCart(jwt));
+      }
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.message || "Failed to update cartItem");
@@ -136,15 +140,9 @@ const cartSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(
-        addItemToCart.fulfilled,
-        (state, action: PayloadAction<CartItem>) => {
-          if (state.cart) {
-            state.cart.cartItems.push(action.payload);
-          }
-          state.loading = false;
-        }
-      )
+      .addCase(addItemToCart.fulfilled, (state) => {
+        state.loading = false;
+      })
       .addCase(addItemToCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
@@ -154,44 +152,15 @@ const cartSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteCartItem.fulfilled, (state, action) => {
-        if (state.cart) {
-          state.cart.cartItems = state.cart.cartItems.filter(
-            (item: CartItem) => item.id !== action.meta.arg.cartItemId
-          );
-          const mrpPrice = sumCartItemMrpPrice(state.cart?.cartItems || []);
-          const sellingPrice = sumCartItemSellingPrice(
-            state.cart?.cartItems || []
-          );
-          state.cart.totalSellingPrice = sellingPrice;
-          state.cart.totalMrpPrice = mrpPrice;
-        }
-
+      .addCase(deleteCartItem.fulfilled, (state) => {
         state.loading = false;
       })
       .addCase(updateCartItem.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateCartItem.fulfilled, (state, action) => {
+      .addCase(updateCartItem.fulfilled, (state) => {
         state.loading = false;
-        if (state.cart) {
-          const index = state.cart.cartItems.findIndex(
-            (item: CartItem) => item.id === action.meta.arg.cartItemId
-          );
-          if (index !== -1) {
-            state.cart.cartItems[index] = {
-              ...state.cart.cartItems[index],
-              ...action.payload,
-            };
-          }
-          const mrpPrice = sumCartItemMrpPrice(state.cart?.cartItems || []);
-          const sellingPrice = sumCartItemSellingPrice(
-            state.cart?.cartItems || []
-          );
-          state.cart.totalSellingPrice = sellingPrice;
-          state.cart.totalMrpPrice = mrpPrice;
-        }
       })
       .addCase(updateCartItem.rejected, (state, action) => {
         state.loading = false;

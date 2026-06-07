@@ -5,6 +5,7 @@ import { useSearchParams } from 'react-router-dom'
 import { colors } from 'src/data/Filter/color'
 import { discount } from 'src/data/Filter/discount'
 import { price } from 'src/data/Filter/price'
+import { sizes } from 'src/data/Filter/size'
 
 const FilterSection = () => {
   const [expendColor, setExpendColor] = useState(false);
@@ -85,6 +86,28 @@ const FilterSection = () => {
 
         </section>
 
+        <section>
+          <FormControl>
+            <FormLabel sx={{ fontSize: "16px", fontWeight: "bold", pb: "14px", color: teal[600] }}
+              className='text-2xl font-semibold'
+              id="size">
+              尺寸
+            </FormLabel>
+            <RadioGroup
+              name="size"
+              onChange={updateFilterParams}
+              aria-labelledby="size"
+              defaultValue=""
+            >
+              {sizes.map((item) => (<FormControlLabel
+                key={item.value}
+                value={item.value} control={<Radio size='small' />}
+                label={item.name} />))}
+
+            </RadioGroup>
+          </FormControl>
+          <Divider />
+        </section>
         <section>
           <FormControl>
             <FormLabel sx={{ fontSize: "16px", fontWeight: "bold", pb: "14px", color: teal[600] }}

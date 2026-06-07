@@ -2,22 +2,26 @@ import { Button, CircularProgress, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { sendLoginSignupOTP, signin } from 'src/State/AuthSlice'
 import { useAppDispatch, useAppSelector } from 'src/State/Store'
 
 const LoginForm = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const { auth } = useAppSelector(store => store)
   const formik = useFormik({
     initialValues: {
       email: "",
       otp: "",
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log("form data", values)
       // values.otp=Number(values.otp)
-      dispatch(signin(values))
-
+      const result = await dispatch(signin(values))
+      if (signin.fulfilled.match(result) && result.payload) {
+        navigate("/")
+      }
     }
   })
 

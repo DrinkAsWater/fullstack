@@ -37,45 +37,45 @@ export const homeCategories = [
     image: "https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&w=200"
   },
   {
-    categoryId: "gaming",
+    categoryId: "game_consoles",
     section: "ELECTRIC_CATEGORIES",
-    name: "遊戲周邊",
+    name: "遊戲主機",
     image: "https://images.pexels.com/photos/3945659/pexels-photo-3945659.jpeg?auto=compress&cs=tinysrgb&w=200"
   },
 
   // ── GRID (mosaic photo wall) ────────────────────────────────────────────
   {
-    categoryId: "clothing-women",
+    categoryId: "women",
     section: "GRID",
     name: "女士禮服",
     image: "https://images.pexels.com/photos/13966969/pexels-photo-13966969.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
-    categoryId: "smartwatches",
+    categoryId: "watches",
     section: "GRID",
     name: "手錶配件",
     image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
-    categoryId: "clothing-women",
+    categoryId: "women",
     section: "GRID",
     name: "女士連衣裙",
     image: "https://images.pexels.com/photos/12730873/pexels-photo-12730873.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
-    categoryId: "clothing-men",
+    categoryId: "men",
     section: "GRID",
     name: "男士休閒服",
     image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
-    categoryId: "clothing-men",
+    categoryId: "men",
     section: "GRID",
     name: "男士商務裝",
     image: "https://images.pexels.com/photos/3768166/pexels-photo-3768166.jpeg?auto=compress&cs=tinysrgb&w=600"
   },
   {
-    categoryId: "clothing-men",
+    categoryId: "men",
     section: "GRID",
     name: "男士丹寧",
     image: "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=600"
@@ -83,74 +83,64 @@ export const homeCategories = [
 
   // ── SHOP_BY_CATEGORIES (circular category cards) ───────────────────────
   {
-    parentCategoryId: "home-living",
-    categoryId: "furniture",
+    categoryId: "home_furniture",
     section: "SHOP_BY_CATEGORIES",
     name: "居家傢俱",
     image: "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "beauty-health",
     categoryId: "skincare",
     section: "SHOP_BY_CATEGORIES",
     name: "美妝保養",
     image: "https://images.pexels.com/photos/3321416/pexels-photo-3321416.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "food-beverages",
     categoryId: "groceries",
     section: "SHOP_BY_CATEGORIES",
     name: "生鮮食品",
     image: "https://images.pexels.com/photos/1132047/pexels-photo-1132047.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "fashion",
-    categoryId: "clothing-women",
+    categoryId: "women",
     section: "SHOP_BY_CATEGORIES",
     name: "女士服飾",
     image: "https://images.pexels.com/photos/3170438/pexels-photo-3170438.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "kids",
-    categoryId: "toys",
+    categoryId: "kids",
     section: "SHOP_BY_CATEGORIES",
-    name: "兒童玩具",
+    name: "兒童童裝",
     image: "https://images.pexels.com/photos/1620779/pexels-photo-1620779.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "accessories",
     categoryId: "watches",
     section: "SHOP_BY_CATEGORIES",
     name: "手錶珠寶",
     image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "sports-outdoors",
-    categoryId: "sports",
+    categoryId: "sports_outdoor",
     section: "SHOP_BY_CATEGORIES",
     name: "運動戶外",
     image: "https://images.pexels.com/photos/3822583/pexels-photo-3822583.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "education",
     categoryId: "books",
     section: "SHOP_BY_CATEGORIES",
     name: "圖書文具",
     image: "https://images.pexels.com/photos/256541/pexels-photo-256541.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "fashion",
-    categoryId: "clothing-men",
+    categoryId: "men",
     section: "SHOP_BY_CATEGORIES",
     name: "男士服飾",
     image: "https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    parentCategoryId: "automotive",
-    categoryId: "automotive",
+    categoryId: "accessories",
     section: "SHOP_BY_CATEGORIES",
-    name: "汽車用品",
-    image: "https://images.pexels.com/photos/1164778/pexels-photo-1164778.jpeg?auto=compress&cs=tinysrgb&w=400"
+    name: "手錶飾品",
+    image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
 
   // ── DEALS ──────────────────────────────────────────────────────────────
@@ -167,13 +157,13 @@ export const homeCategories = [
     image: "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    categoryId: "clothing-women",
+    categoryId: "women",
     section: "DEALS",
     name: "女裝獨家優惠",
     image: "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    categoryId: "furniture",
+    categoryId: "home_furniture",
     section: "DEALS",
     name: "傢俱限量特惠",
     image: "https://images.pexels.com/photos/1350789/pexels-photo-1350789.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -185,7 +175,7 @@ export const homeCategories = [
     image: "https://images.pexels.com/photos/2113994/pexels-photo-2113994.jpeg?auto=compress&cs=tinysrgb&w=400"
   },
   {
-    categoryId: "sports",
+    categoryId: "sports_outdoor",
     section: "DEALS",
     name: "運動品牌特賣",
     image: "https://images.pexels.com/photos/3822583/pexels-photo-3822583.jpeg?auto=compress&cs=tinysrgb&w=400"

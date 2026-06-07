@@ -16,6 +16,10 @@ export interface BusinessDetails {
 }
 export interface Seller {
   id?: number;
+  // Flat field returned by the GET /products, GET /products/{id}, GET /api/cart
+  // SellerSummary projection (id/sellerName/businessName only, no sensitive fields).
+  // The full Seller entity (e.g. orders/reviews) still nests it under businessDetails.
+  businessName?: string;
   mobile: string;
   otp: string;
   GSTIN: string;

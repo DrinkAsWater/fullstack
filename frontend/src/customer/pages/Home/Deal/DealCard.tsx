@@ -1,9 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Deal } from 'src/types/dealTypes'
 
 const DealCard = ({ item }: { item: Deal }) => {
+  const navigate = useNavigate()
   return (
-    <div className="w-[200px] lg:w-[220px] cursor-pointer flex-shrink-0">
+    <div onClick={() => navigate(`/products/${item.category.categoryId}`)} className="w-[200px] lg:w-[220px] cursor-pointer flex-shrink-0">
       <div className="p-[2px] bg-gradient-to-r from-red-500 to-pink-500 rounded-xl">
         <img
           className="w-full h-[200px] lg:h-[220px] object-cover rounded-xl"

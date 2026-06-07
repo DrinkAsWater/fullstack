@@ -30,7 +30,7 @@ const CartItemCard = ({item}:{item:CartItem}) => {
                     <img className='w-[90px] rounded-md' src={item.product.images[0]} alt="" />
                 </div>
                 <div className='space-y-2'>
-                    <h1 className="font-semibold text-lg">{item.product.seller?.businessDetails.businessName}</h1>
+                    <h1 className="font-semibold text-lg">{item.product.seller?.businessName}</h1>
                     <p className='text-gray-600 font-medium text-sm'>{item.product.title}</p>
                     <p className='text-gray-400 text-xs'><strong>賣家：</strong>{item.product.seller?.sellerName || "Wu Shop"}</p>
                     <p className='text-sm'>7天換貨保障</p>

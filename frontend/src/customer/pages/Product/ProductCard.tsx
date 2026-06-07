@@ -61,7 +61,7 @@ const ProductCard = ({ item }: { item: Product }) => {
       </div>
       <div className='details pt-3 space-y-1 group-hover-effect rounded-md'>
         <div className='name'>
-          <h1>{item.seller?.businessDetails.businessName}</h1>
+          <h1>{item.seller?.businessName}</h1>
           <p>{item.title}</p>
         </div>
         <div className='price flex items-center gap-3'>

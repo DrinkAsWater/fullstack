@@ -29,7 +29,7 @@ export const applyCoupon = createAsyncThunk<
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.message?.data.error || "Failed to apply coupon"
+        error.response?.data?.error || "Failed to apply coupon"
       );
     }
   }

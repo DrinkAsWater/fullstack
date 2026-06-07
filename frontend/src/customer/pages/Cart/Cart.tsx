@@ -6,7 +6,8 @@ import { Button, IconButton, TextField } from '@mui/material'
 import PricingCard from './PricingCard'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from 'src/State/Store'
-import { fetchUserCart } from 'src/State/customer/cartSlice'
+import { deleteCartItem, fetchUserCart } from 'src/State/customer/cartSlice'
+import { applyCoupon } from 'src/State/customer/couponSlice'
 
 
 
@@ -17,16 +18,50 @@ const Cart = () => {
         setCouponCode(e.target.value)
     }
     const dispatch = useAppDispatch();
-    const {cart}= useAppSelector(store=>store)
+    const {cart, coupon}= useAppSelector(store=>store)
 
     useEffect(()=>{
         dispatch(fetchUserCart(localStorage.getItem("jwt")||""))
     },[])
 
+    const handleApplyCoupon = () => {
+        if (!couponCode) return
+        dispatch(applyCoupon({
+            apply: "true",
+            code: couponCode,
+            orderValue: cart.cart?.totalSellingPrice ?? 0,
+            jwt: localStorage.getItem("jwt") || "",
+        }))
+    }
+
+    const handleClearCart = () => {
+        const jwt = localStorage.getItem("jwt") || ""
+        cart.cart?.cartItems.forEach((item) => {
+            dispatch(deleteCartItem({ jwt, cartItemId: item.id }))
+        })
+    }
+
+    const handleRemoveCoupon = () => {
+        if (!cart.cart?.couponCode) return
+        dispatch(applyCoupon({
+            apply: "false",
+            code: cart.cart.couponCode,
+            orderValue: cart.cart?.totalSellingPrice ?? 0,
+            jwt: localStorage.getItem("jwt") || "",
+        }))
+        setCouponCode("")
+    }
+
     return (
         <div className='pt-10 px-5 sm:px-10 md:px-60 min-h-screen '>
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-5'>
                 <div className='cartItemSection lg:col-span-2 space-y-3'>
+                    {cart.cart?.cartItems && cart.cart.cartItems.length > 0 &&
+                        <div className='flex justify-end'>
+                            <Button size='small' onClick={handleClearCart} className='!text-red-600'>
+                                清空購物車
+                            </Button>
+                        </div>}
                     {cart.cart?.cartItems.map((item) => <CartItem item={item}/>)}
 
                 </div>
@@ -38,25 +73,26 @@ const Cart = () => {
                             </div>
                             <span>輸入優惠代碼</span>
                         </div>
-                        {true ? <div className='flex  justify-between items-center'>
+                        {!cart.cart?.couponCode ? <div className='flex  justify-between items-center'>
                             <TextField onChange={handleChange}
+                                value={couponCode}
                                 id="outlined-basic"
                                 placeholder='折扣碼'
                                 size='small' variant="outlined" />
-                            <Button size='small'>
+                            <Button size='small' disabled={coupon.loading} onClick={handleApplyCoupon}>
                                 接受
                             </Button>
                         </div>
                             : <div className='flex'>
                                 <div className='p-1 pl-5 pr-3 border rounded-md flex gap-2 items-center'>
-                                    <span className=''>GG112優惠已被使用</span>
-                                    <IconButton size='small'>
+                                    <span className=''>{cart.cart.couponCode} 優惠已套用</span>
+                                    <IconButton size='small' onClick={handleRemoveCoupon}>
                                         <Close className='text-red-600' />
                                     </IconButton>
 
                                 </div>
                             </div>}
-
+                        {coupon.error && <p className='text-red-600 text-xs'>{coupon.error}</p>}
 
 
                     </div>

@@ -1,11 +1,13 @@
 import { Button, TextField } from '@mui/material'
 import { useFormik } from 'formik'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { sendLoginSignupOTP, signup } from 'src/State/AuthSlice'
 import { useAppDispatch, useAppSelector } from 'src/State/Store'
 
 const RegisterForm = () => {
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
     const { auth } = useAppSelector(store => store)
     const formik = useFormik({
         initialValues: {
@@ -14,13 +16,16 @@ const RegisterForm = () => {
             fullName: "",
             mobile: ""
         },
-        onSubmit: (values) => {
-            dispatch(signup({
+        onSubmit: async (values) => {
+            const result = await dispatch(signup({
                 email: values.email,
                 otp: values.otp,
                 fullName: values.fullName,
                 mobile: values.mobile
             }))
+            if (signup.fulfilled.match(result) && result.payload) {
+                navigate("/")
+            }
         }
     })
 
