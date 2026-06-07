@@ -14,4 +14,6 @@ public interface CartService {
 		int quantity);
 	public Cart findUserCart(User user);
 
+	public void updateCartTotals(Cart cart);
+
 }

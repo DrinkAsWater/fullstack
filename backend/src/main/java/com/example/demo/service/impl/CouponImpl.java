@@ -12,6 +12,7 @@ import com.example.demo.model.User;
 import com.example.demo.repository.CartRepository;
 import com.example.demo.repository.CouponRepository;
 import com.example.demo.repository.UserRespository;
+import com.example.demo.service.CartService;
 import com.example.demo.service.CouponService;
 
 import lombok.RequiredArgsConstructor;
@@ -19,17 +20,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CouponImpl implements CouponService {
-	
+
 	private final CouponRepository couponRepository;
 	private final CartRepository cartRepository;
 	private final UserRespository userRespository;
+	private final CartService cartService;
 
 	@Override
 	public Cart applyCoupon(String code, double orderValue, User user) throws Exception {
 		Coupon coupon = couponRepository.findByCode(code);
-		
+
 		Cart cart = cartRepository.findByUserId(user.getId());
-		
+
 		if (coupon == null) {
 			throw new Exception("Coupon not valid");
 		}
@@ -43,13 +45,14 @@ public class CouponImpl implements CouponService {
 				&& LocalDate.now().isBefore(coupon.getValidityEndtDate())) {
 			user.getUsedCoupons().add(coupon);
 			userRespository.save(user);
-			
-			double discountedPrice = ( cart.getTotalSellingPrice()*coupon.getDiscountPercentage())/100;
-			
-			cart.setTotalSellingPrice(cart.getTotalSellingPrice()-discountedPrice);
+
+			// 先重算「未套用折扣券」的基準總額，避免在已被折扣過的金額上疊加計算
+			cartService.updateCartTotals(cart);
+
+			double discountAmount = (cart.getTotalSellingPrice() * coupon.getDiscountPercentage()) / 100;
+			cart.setTotalSellingPrice(cart.getTotalSellingPrice() - discountAmount);
 			cart.setCouponCode(code);
-			cartRepository.save(cart);
-			return cart;
+			return cartRepository.save(cart);
 		}
 		throw new Exception("coupon not valid");
 	}
@@ -57,18 +60,16 @@ public class CouponImpl implements CouponService {
 	@Override
 	public Cart removeCoupon(String code, User user) throws Exception {
 		Coupon coupon = couponRepository.findByCode(code);
-		
+
 		if (coupon== null ) {
 			throw new Exception("coupon not found");
 		}
 		Cart cart = cartRepository.findByUserId(user.getId());
-		
-		double discountedPrice = ( cart.getTotalSellingPrice()*coupon.getDiscountPercentage())/100;
-		
-		cart.setTotalSellingPrice(cart.getTotalSellingPrice()+discountedPrice);
-		cart.setCouponCode(code);
-		
-		return cartRepository.save(cart);
+
+		// 清除折扣券並以購物車項目重新計算基準總額，取代原本對折扣後金額做反向運算（會產生誤差）的寫法
+		cart.setCouponCode(null);
+		cartService.updateCartTotals(cart);
+		return cart;
 	}
 
 	@Override

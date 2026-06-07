@@ -2,10 +2,12 @@ package com.example.demo.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Cart;
 import com.example.demo.model.CartItem;
 import com.example.demo.model.User;
 import com.example.demo.repository.CartitemRepository;
 import com.example.demo.service.CartItemService;
+import com.example.demo.service.CartService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class CartItemServiceImpl implements CartItemService {
 
 	private final CartitemRepository cartitemRepository;
+	private final CartService cartService;
 
 	@Override
 	public CartItem updateCartItem(Long userId, Long id, CartItem cartItem) throws Exception {
@@ -26,7 +29,9 @@ public class CartItemServiceImpl implements CartItemService {
 			item.setQuantity(cartItem.getQuantity());
 			item.setMrpPrice(item.getQuantity() * item.getProduct().getMrpPrice());
 			item.setSellingPrice(item.getQuantity() * item.getProduct().getSellingPrice());
-			return cartitemRepository.save(item);
+			CartItem updatedItem = cartitemRepository.save(item);
+			cartService.updateCartTotals(item.getCart());
+			return updatedItem;
 		}
 		throw new Exception("you can't update this cartItem");
 	}
@@ -36,9 +41,12 @@ public class CartItemServiceImpl implements CartItemService {
 		CartItem item = findCartItemBy(cartItemId);
 
 		User cartItemUser = item.getCart().getUser();
-		
+
 		if (cartItemUser.getId().equals(userId)) {
+			Cart cart = item.getCart();
+			cart.getCartItems().remove(item);
 			cartitemRepository.delete(item);
+			cartService.updateCartTotals(cart);
 		}
 		else throw new Exception("you aren't delete this item");
 

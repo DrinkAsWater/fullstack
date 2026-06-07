@@ -21,6 +21,7 @@ import com.example.demo.request.CreateProductRequest;
 import com.example.demo.service.ProductService;
 
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 
@@ -117,10 +118,18 @@ public class ProductServiceImpl implements ProductService {
 			Integer maxPrice, Integer minDiscount, String sort, String stock, Integer pageNumber) {
 		Specification<Product> spec = (root, query, criteriaBuilder) -> {
 			List<Predicate> predicates = new ArrayList<>();
+			query.distinct(true);
 
 			if (category != null) {
-				Join<Product, Category> categoryJoin = root.join("category");
-				predicates.add(criteriaBuilder.equal(categoryJoin.get("categoryId"), category));
+				// Hierarchical match: direct L3, parent L2, or grandparent L1
+				Join<Product, Category> catJoin = root.join("category");
+				Join<Category, Category> parentJoin = catJoin.join("parentCategory", JoinType.LEFT);
+				Join<Category, Category> grandparentJoin = parentJoin.join("parentCategory", JoinType.LEFT);
+				predicates.add(criteriaBuilder.or(
+					criteriaBuilder.equal(catJoin.get("categoryId"), category),
+					criteriaBuilder.equal(parentJoin.get("categoryId"), category),
+					criteriaBuilder.equal(grandparentJoin.get("categoryId"), category)
+				));
 			}
 			if (colors != null && !colors.isEmpty()) {
 				predicates.add(criteriaBuilder.equal(root.get("color"), colors));
